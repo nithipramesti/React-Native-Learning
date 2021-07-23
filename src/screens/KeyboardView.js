@@ -28,7 +28,7 @@ const KeyboardView = () => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ScrollView contentContainerStyle={{...styles.container}}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : null}
+          behavior={Platform.OS === 'ios' ? 'position' : null}
           style={{flex: 1}}>
           <TextInput style={{...styles.textInput}} />
           <TextInput style={{...styles.textInput}} />

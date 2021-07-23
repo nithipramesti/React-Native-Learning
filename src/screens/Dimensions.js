@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const IMAGE_WIDTH_HEIGHT = Dimensions.get('window').width * 0.6;
+
 const TopicDimensions = () => {
   return (
     <View>
@@ -44,8 +46,10 @@ const TopicDimensions = () => {
       <Image
         source={lakeImage}
         style={{
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').width,
+          width: IMAGE_WIDTH_HEIGHT,
+          height: IMAGE_WIDTH_HEIGHT,
+          borderRadius: IMAGE_WIDTH_HEIGHT * 0.5,
+          alignSelf: 'center',
           marginTop: 50,
         }}
       />
