@@ -1,5 +1,11 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import {Text, View, StyleSheet, Dimensions, StatusBar} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import MainStack from './src/navigators/MainStack';
+import MainTab from './src/navigators/MainTab';
+import TopTabNav from './src/navigators/TopTabNav';
+
 import Topic from './src/screens/Topic';
 import Topic4 from './src/screens/Topic4';
 import Topic5 from './src/screens/Topic5';
@@ -12,10 +18,9 @@ import TopicSafeAreaView from './src/screens/TopicSafeAreaView';
 
 const App = () => {
   return (
-    <View>
-      {/* <StatusBar translucent backgroundColor="red" /> */}
-      <KeyboardView />
-    </View>
+    <NavigationContainer>
+      <MainTab />
+    </NavigationContainer>
   );
 };
 
