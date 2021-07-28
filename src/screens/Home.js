@@ -1,4 +1,5 @@
 import React from 'react';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
   View,
   Text,
@@ -7,6 +8,7 @@ import {
   TouchableHighlight,
   FlatList,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 
 const style = StyleSheet.create({
   mainContainer: {
@@ -49,6 +51,16 @@ const users = [
 ];
 
 const Home = props => {
+  // const globalState = useSelector(state => {
+  //   return {
+  //     auth: state.auth,
+  //     todo: state.todo,
+  //   };
+  // });
+
+  const globalAuth = useSelector(state => state.auth); //same as 'mapStateToProp' in class component, but without 'connect'
+  const globalTodo = useSelector(state => state.todo);
+
   const renderUserList = ({item}) => {
     return (
       <View style={{...style.userListItem}}>
@@ -65,6 +77,8 @@ const Home = props => {
   return (
     <View style={{...style.mainContainer}}>
       <Text>Home Screen</Text>
+      <Text>Username: {globalAuth.username}</Text>
+      <Text>Todo Count: {globalTodo.todoCount}</Text>
 
       <FlatList
         style={{...style.flatListContainer}}

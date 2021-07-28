@@ -1,13 +1,11 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   StyleSheet,
   TextInput,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,34 +22,38 @@ const styles = StyleSheet.create({
 });
 
 const KeyboardView = () => {
+  const scrollRef = useRef(null);
+  const scrollToView = () => {
+    scrollRef.current.scrollIntoView();
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <ScrollView contentContainerStyle={{...styles.container}}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'position' : null}
-          style={{flex: 1}}>
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-          <TextInput style={{...styles.textInput}} />
-        </KeyboardAvoidingView>
-      </ScrollView>
+      <KeyboardAwareScrollView ref={scrollRef}>
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+        <TextInput style={{...styles.textInput}} onFocus={scrollToView} />
+      </KeyboardAwareScrollView>
     </TouchableWithoutFeedback>
   );
 };
