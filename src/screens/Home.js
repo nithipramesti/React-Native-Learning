@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
   View,
@@ -7,20 +7,24 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   FlatList,
+  RefreshControl,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from 'axios';
+import {TextInput} from 'react-native-gesture-handler';
 
 const style = StyleSheet.create({
   mainContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 16,
   },
   navBtn: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     backgroundColor: 'pink',
     borderRadius: 4,
-    marginTop: 10,
+    alignSelf: 'center',
   },
   userListItem: {
     flexDirection: 'row',
@@ -33,33 +37,48 @@ const style = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 10,
   },
+  textInput: {
+    backgroundColor: 'lightgray',
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    marginTop: 4,
+    marginHorizontal: 16,
+    paddingVertical: 6,
+    flex: 1,
+  },
 });
 
-const users = [
-  {
-    id: 1,
-    username: 'johndoe',
-  },
-  {
-    id: 2,
-    username: 'marryjane',
-  },
-  {
-    id: 3,
-    username: 'barackobama',
-  },
-];
-
 const Home = props => {
-  // const globalState = useSelector(state => {
-  //   return {
-  //     auth: state.auth,
-  //     todo: state.todo,
-  //   };
-  // });
+  const [userList, setUserList] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [userInput, setUserInput] = useState('');
 
-  const globalAuth = useSelector(state => state.auth); //same as 'mapStateToProp' in class component, but without 'connect'
-  const globalTodo = useSelector(state => state.todo);
+  const fetchUsers = () => {
+    Axios.get('http://localhost:2000/users')
+      .then(res => {
+        console.log(res.data);
+        setUserList(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const refreshHandler = () => {
+    setIsRefreshing(true);
+    Axios.get('http://localhost:2000/users')
+      .then(res => {
+        console.log(res.data);
+        setUserList(res.data);
+        setIsRefreshing(false);
+      })
+      .catch(err => {
+        console.log(err);
+        setIsRefreshing(false);
+      });
+  };
+
+  const dispatch = useDispatch();
 
   const renderUserList = ({item}) => {
     return (
@@ -74,16 +93,49 @@ const Home = props => {
     );
   };
 
+  const inputHandler = text => {
+    setUserInput(text);
+  };
+
+  const sendBtnHandler = () => {
+    Axios.post('http://localhost:2000/users', {username: userInput})
+      .then(res => {
+        console.log(res.data);
+        fetchUsers();
+        setUserInput('');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   return (
     <View style={{...style.mainContainer}}>
-      <Text>Home Screen</Text>
-      <Text>Username: {globalAuth.username}</Text>
-      <Text>Todo Count: {globalTodo.todoCount}</Text>
+      <View style={{flexDirection: 'row'}}>
+        <TextInput
+          onChangeText={inputHandler}
+          style={{...style.textInput}}
+          value={userInput}
+        />
+        <TouchableOpacity onPress={sendBtnHandler} style={{...style.navBtn}}>
+          <Text>SEND</Text>
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         style={{...style.flatListContainer}}
-        data={users}
+        data={userList}
         renderItem={renderUserList}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={refreshHandler}
+          />
+        }
       />
     </View>
   );
