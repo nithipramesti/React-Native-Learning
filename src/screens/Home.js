@@ -49,6 +49,10 @@ const style = StyleSheet.create({
 });
 
 const Home = props => {
+  const dispatch = useDispatch();
+
+  const globalAuth = useSelector(state => state.auth);
+
   const [userList, setUserList] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [userInput, setUserInput] = useState('');
@@ -77,8 +81,6 @@ const Home = props => {
         setIsRefreshing(false);
       });
   };
-
-  const dispatch = useDispatch();
 
   const renderUserList = ({item}) => {
     return (

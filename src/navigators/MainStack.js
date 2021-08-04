@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from 'axios';
 
 import Home from '../screens/Home';
 import UserProfile from '../screens/UserProfile';
@@ -27,8 +28,14 @@ const MainStack = () => {
   const logoutBtnHandler = () => {
     AsyncStorage.removeItem('username')
       .then(() => {
-        dispatch({
-          type: 'RESET_USERNAME',
+        AsyncStorage.getItem('interceptorId').then(interceptorId => {
+          Axios.interceptors.request.eject(parseInt(interceptorId));
+
+          AsyncStorage.removeItem('interceptorId').then(() => {
+            dispatch({
+              type: 'RESET_USERNAME',
+            });
+          });
         });
       })
       .catch(() => {

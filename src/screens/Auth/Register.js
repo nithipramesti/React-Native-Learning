@@ -70,9 +70,20 @@ const Register = props => {
             .then(() => {
               AsyncStorage.setItem('username', registerForm.username)
                 .then(() => {
-                  dispatch({
-                    type: 'CHANGE_USERNAME',
-                    payload: registerForm.username,
+                  AsyncStorage.setItem(
+                    'interceptorId',
+                    Axios.interceptors.request
+                      .use(request => {
+                        request.headers['LOGGED-IN-USER'] =
+                          res.data[0].username;
+                        return request;
+                      })
+                      .toString(),
+                  ).then(() => {
+                    dispatch({
+                      type: 'CHANGE_USERNAME',
+                      payload: loginForm.username,
+                    });
                   });
                 })
                 .catch(err => {

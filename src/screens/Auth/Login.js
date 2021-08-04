@@ -68,9 +68,19 @@ const Login = props => {
         if (res.data.length) {
           AsyncStorage.setItem('username', loginForm.username)
             .then(() => {
-              dispatch({
-                type: 'CHANGE_USERNAME',
-                payload: loginForm.username,
+              AsyncStorage.setItem(
+                'interceptorId',
+                Axios.interceptors.request
+                  .use(request => {
+                    request.headers['LOGGED-IN-USER'] = loginForm.username;
+                    return request;
+                  })
+                  .toString(),
+              ).then(() => {
+                dispatch({
+                  type: 'CHANGE_USERNAME',
+                  payload: loginForm.username,
+                });
               });
             })
             .catch(err => {
